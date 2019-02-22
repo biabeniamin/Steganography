@@ -126,6 +126,10 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size, int* length)
 	}
 
 	*length = addedData >> 2;
+	if (addedData >> 2 < size)
+	{
+		printf("Could not embed in image because it is too small!");
+	}
 
 	return input;
 }
