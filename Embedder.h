@@ -17,5 +17,8 @@ public:
 
 	cv::Mat RemoveBlueLayer(cv::Mat input);
 	cv::Mat Sobel(cv::Mat input);
+
+	cv::Mat EmbedData(cv::Mat input, uchar *data, int size);
+
 };
 

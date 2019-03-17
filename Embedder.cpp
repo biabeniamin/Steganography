@@ -71,3 +71,39 @@ cv::Mat Embedder::Sobel(cv::Mat input)
 
 	return imgCanny;
 }
+
+cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data, int size)
+{
+	int addedData = 0;
+	Mat input = input2.clone();
+	Mat imgCanny = Sobel(input);
+
+	for (int i = 0; i < imgCanny.rows; i++)
+	{
+		for (int j = 0; j < imgCanny.cols; j++)
+		{
+			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
+
+				Vec3b pixel = input.at<Vec3b>(i, j);
+				printf("%d \n", pixel.val[0] & 0xF);
+
+				pixel.val[0] = pixel.val[0] & 0xF0 | data[addedData];
+
+				input.at<Vec3b>(i, j) = pixel;
+
+				addedData++;
+				if (addedData  == size)
+				{
+					break;
+				}
+			}
+		}
+
+		if (addedData == size)
+		{
+			break;
+		}
+	}
+
+	return input;
+}
