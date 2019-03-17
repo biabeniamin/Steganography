@@ -107,3 +107,37 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data, int size)
 
 	return input;
 }
+
+uchar* Embedder::ExtractData(cv::Mat input)
+{
+	Mat imgCanny = Sobel(input);
+	int count = 0;
+
+	buffer = (uchar*)malloc(1000);
+
+	for (int i = 0; i < imgCanny.rows; i++)
+	{
+		for (int j = 0; j < imgCanny.cols; j++)
+		{
+
+			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
+
+				Vec3b pixel = input.at<Vec3b>(i, j);
+				printf("%d \n", pixel.val[0] & 0xF);
+
+				count++;
+
+				if (count > 15)
+				{
+					printf("done");
+					break;
+				}
+			}
+		}
+		if (count > 15)
+			break;
+	}
+
+	return buffer;
+
+}

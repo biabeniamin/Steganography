@@ -19,6 +19,9 @@ public:
 	cv::Mat Sobel(cv::Mat input);
 
 	cv::Mat EmbedData(cv::Mat input, uchar *data, int size);
+	uchar* ExtractData(cv::Mat input);
 
+private:
+	uchar * buffer;
 };
 
