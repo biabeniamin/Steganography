@@ -16,5 +16,6 @@ public:
 	int CountPixels(cv::Mat input);
 
 	cv::Mat RemoveBlueLayer(cv::Mat input);
+	cv::Mat Sobel(cv::Mat input);
 };
 

@@ -54,3 +54,20 @@ cv::Mat Embedder::RemoveBlueLayer(Mat input)
 
 	return image;
 }
+
+cv::Mat Embedder::Sobel(cv::Mat input)
+{
+	Mat imgGrayscale;       // grayscale image
+	Mat imgBlurred;         // blured image
+	Mat imgCanny;
+
+	double sigma = 500;
+	int lowTh = 90;
+	int highTh = 100;
+
+	cvtColor(RemoveBlueLayer(input), imgGrayscale, CV_BGR2GRAY);
+	GaussianBlur(imgGrayscale, imgBlurred, cv::Size(5, 5), sigma);
+	Canny(imgBlurred, imgCanny, lowTh, highTh);
+
+	return imgCanny;
+}
