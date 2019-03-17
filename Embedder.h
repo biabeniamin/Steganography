@@ -14,5 +14,7 @@ public:
 		cv::Mat output);
 
 	int CountPixels(cv::Mat input);
+
+	cv::Mat RemoveBlueLayer(cv::Mat input);
 };
 
