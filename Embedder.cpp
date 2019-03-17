@@ -119,11 +119,11 @@ uchar* Embedder::ExtractData(cv::Mat input)
 	{
 		for (int j = 0; j < imgCanny.cols; j++)
 		{
-
 			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
 
 				Vec3b pixel = input.at<Vec3b>(i, j);
 				printf("%d \n", pixel.val[0] & 0xF);
+				buffer[count] = pixel.val[0] & 0xF;
 
 				count++;
 
