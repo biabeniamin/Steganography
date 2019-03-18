@@ -93,22 +93,33 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 
 				Vec3b pixel = input.at<Vec3b>(i, j);
 
-				if(addedData % 2 ==0)
-					pixel.val[0] = pixel.val[0] & 0xF0 | (data[addedData / 2] >> 4 & 0xF);
-				else
-					pixel.val[0] = pixel.val[0] & 0xF0 | (data[addedData / 2] & 0xF);
+				switch (addedData % 4)
+				{
+				case 0:
+					pixel.val[0] = pixel.val[0] & 0xFC | (data[addedData / 4] >> 6 & 0x3);
+					break;
+				case 1:
+					pixel.val[0] = pixel.val[0] & 0xFC | (data[addedData / 4] >> 4 & 0x3);
+					break;
+				case 2:
+					pixel.val[0] = pixel.val[0] & 0xFC | (data[addedData / 4] >> 2 & 0x3);
+					break;
+				case 3:
+					pixel.val[0] = pixel.val[0] & 0xFC | (data[addedData / 4] >> 0 & 0x3);
+					break;
+				}
 
 				input.at<Vec3b>(i, j) = pixel;
 
 				addedData++;
-				if (addedData >> 1 == size)
+				if (addedData >> 2 == size)
 				{
 					break;
 				}
 			}
 		}
 
-		if (addedData >> 1  == size)
+		if (addedData >> 2  == size)
 		{
 			break;
 		}
@@ -132,26 +143,37 @@ uchar* Embedder::ExtractData(cv::Mat input)
 			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
 
 				Vec3b pixel = input.at<Vec3b>(i, j);
-				if(count % 2 == 0)
-					buffer[count / 2] = (pixel.val[0] & 0xF) << 4;
-				else
-					buffer[count / 2] |= (pixel.val[0] & 0xF);
+				switch (count % 4)
+				{
+				case 0:
+					buffer[count / 4] = (pixel.val[0] & 0x3) << 6;
+					break;
+				case 1:
+					buffer[count / 4] |= (pixel.val[0] & 0x3) << 4;
+					break;
+				case 2:
+					buffer[count / 4] |= (pixel.val[0] & 0x3) << 2;
+					break;
+				case 3:
+					buffer[count / 4] |= (pixel.val[0] & 0x3) << 0;
+					break;
+				}
 
 				count++;
 
-				if (count == 4)
+				if (count == 8)
 				{
 					size = buffer[0] << 8 | buffer[1];
 				}
 
-				if (count >> 1 == size)
+				if (count >> 2 == size)
 				{
 					printf("done\n");
 					break;
 				}
 			}
 		}
-		if (count >> 1 == size)
+		if (count >> 2 == size)
 			break;
 	}
 
