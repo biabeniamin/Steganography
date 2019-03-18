@@ -72,11 +72,18 @@ cv::Mat Embedder::Sobel(cv::Mat input)
 	return imgCanny;
 }
 
-cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data, int size)
+cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 {
 	int addedData = 0;
 	Mat input = input2.clone();
 	Mat imgCanny = Sobel(input);
+	uchar *data = (uchar*)malloc(size + 2);
+
+	memcpy(data + 2, data2, size);
+
+	//write length
+	data[0] = size >> 8;
+	data[1] = size & 0xFF;
 
 	for (int i = 0; i < imgCanny.rows; i++)
 	{
@@ -85,7 +92,6 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data, int size)
 			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
 
 				Vec3b pixel = input.at<Vec3b>(i, j);
-				printf("%d \n", pixel.val[0] & 0xF);
 
 				if(addedData % 2 ==0)
 					pixel.val[0] = pixel.val[0] & 0xF0 | (data[addedData / 2] >> 4 & 0xF);
@@ -115,6 +121,7 @@ uchar* Embedder::ExtractData(cv::Mat input)
 {
 	Mat imgCanny = Sobel(input);
 	int count = 0;
+	int size = 20;
 
 	buffer = (uchar*)malloc(1000);
 
@@ -132,17 +139,22 @@ uchar* Embedder::ExtractData(cv::Mat input)
 
 				count++;
 
-				if (count > 30)
+				if (count == 4)
 				{
-					printf("done");
+					size = buffer[0] << 8 | buffer[1];
+				}
+
+				if (count >> 1 == size)
+				{
+					printf("done\n");
 					break;
 				}
 			}
 		}
-		if (count > 30)
+		if (count >> 1 == size)
 			break;
 	}
 
-	return buffer;
+	return buffer + 2;
 
 }
