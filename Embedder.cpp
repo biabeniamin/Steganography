@@ -87,19 +87,22 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data, int size)
 				Vec3b pixel = input.at<Vec3b>(i, j);
 				printf("%d \n", pixel.val[0] & 0xF);
 
-				pixel.val[0] = pixel.val[0] & 0xF0 | data[addedData];
+				if(addedData % 2 ==0)
+					pixel.val[0] = pixel.val[0] & 0xF0 | (data[addedData / 2] >> 4 & 0xF);
+				else
+					pixel.val[0] = pixel.val[0] & 0xF0 | (data[addedData / 2] & 0xF);
 
 				input.at<Vec3b>(i, j) = pixel;
 
 				addedData++;
-				if (addedData  == size)
+				if (addedData >> 1 == size)
 				{
 					break;
 				}
 			}
 		}
 
-		if (addedData == size)
+		if (addedData >> 1  == size)
 		{
 			break;
 		}
@@ -122,19 +125,21 @@ uchar* Embedder::ExtractData(cv::Mat input)
 			if (imgCanny.data[i * imgCanny.rows + j] > 0) {
 
 				Vec3b pixel = input.at<Vec3b>(i, j);
-				printf("%d \n", pixel.val[0] & 0xF);
-				buffer[count] = pixel.val[0] & 0xF;
+				if(count % 2 == 0)
+					buffer[count / 2] = (pixel.val[0] & 0xF) << 4;
+				else
+					buffer[count / 2] |= (pixel.val[0] & 0xF);
 
 				count++;
 
-				if (count > 15)
+				if (count > 30)
 				{
 					printf("done");
 					break;
 				}
 			}
 		}
-		if (count > 15)
+		if (count > 30)
 			break;
 	}
 
