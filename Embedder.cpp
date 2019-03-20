@@ -135,7 +135,7 @@ uchar* Embedder::ExtractData(cv::Mat input, int *length)
 	int count = 0;
 	int size = 20;
 
-	buffer = (uchar*)malloc(1000);
+	buffer = (uchar*)malloc(20);
 
 	for (int i = 0; i < imgCanny.rows; i++)
 	{
@@ -165,6 +165,7 @@ uchar* Embedder::ExtractData(cv::Mat input, int *length)
 				if (count == 8)
 				{
 					size = buffer[0] << 8 | buffer[1];
+					buffer = (uchar*)realloc(buffer, size + 50);
 				}
 
 				if (count >> 2 == size)
