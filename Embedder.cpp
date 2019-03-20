@@ -82,6 +82,7 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 	memcpy(data + 2, data2, size);
 
 	//write length
+	size += 2;
 	data[0] = size >> 8;
 	data[1] = size & 0xFF;
 
@@ -177,7 +178,7 @@ uchar* Embedder::ExtractData(cv::Mat input, int *length)
 			break;
 	}
 
-	*length = size;
+	*length = size - 2;
 
 	return buffer + 2;
 
