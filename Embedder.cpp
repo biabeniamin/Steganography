@@ -128,7 +128,7 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 	return input;
 }
 
-uchar* Embedder::ExtractData(cv::Mat input)
+uchar* Embedder::ExtractData(cv::Mat input, int *length)
 {
 	Mat imgCanny = Sobel(input);
 	int count = 0;
@@ -176,6 +176,8 @@ uchar* Embedder::ExtractData(cv::Mat input)
 		if (count >> 2 == size)
 			break;
 	}
+
+	*length = size;
 
 	return buffer + 2;
 
