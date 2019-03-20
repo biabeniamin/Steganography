@@ -181,6 +181,14 @@ uchar* Embedder::ExtractData(cv::Mat input, int *length)
 
 	*length = size - 2;
 
+	if (count >> 2 < size)
+	{
+		printf("Could not embed in image because it is too small!");
+		*length = 0;
+	}
+
+	
+
 	return buffer + 2;
 
 }
