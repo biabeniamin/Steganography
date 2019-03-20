@@ -18,7 +18,7 @@ public:
 	cv::Mat RemoveBlueLayer(cv::Mat input);
 	cv::Mat Sobel(cv::Mat input);
 
-	cv::Mat EmbedData(cv::Mat input, uchar *data, int size);
+	cv::Mat EmbedData(cv::Mat input, uchar *data, int size, int *length);
 	uchar* ExtractData(cv::Mat input, int *length);
 
 private:

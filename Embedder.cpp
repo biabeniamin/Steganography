@@ -61,9 +61,9 @@ cv::Mat Embedder::Sobel(cv::Mat input)
 	Mat imgBlurred;         // blured image
 	Mat imgCanny;
 
-	double sigma = 500;
-	int lowTh = 90;
-	int highTh = 100;
+	double sigma = 1;
+	int lowTh = 45;
+	int highTh = 90;
 
 	cvtColor(RemoveBlueLayer(input), imgGrayscale, CV_BGR2GRAY);
 	GaussianBlur(imgGrayscale, imgBlurred, cv::Size(5, 5), sigma);
@@ -72,7 +72,7 @@ cv::Mat Embedder::Sobel(cv::Mat input)
 	return imgCanny;
 }
 
-cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
+cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size, int* length)
 {
 	int addedData = 0;
 	Mat input = input2.clone();
@@ -109,7 +109,6 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 					pixel.val[0] = pixel.val[0] & 0xFC | (data[addedData / 4] >> 0 & 0x3);
 					break;
 				}
-
 				input.at<Vec3b>(i, j) = pixel;
 
 				addedData++;
@@ -125,6 +124,8 @@ cv::Mat Embedder::EmbedData(cv::Mat input2, uchar *data2, int size)
 			break;
 		}
 	}
+
+	*length = addedData >> 2;
 
 	return input;
 }
