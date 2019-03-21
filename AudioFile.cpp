@@ -4,10 +4,18 @@
 
 AudioFile::AudioFile(char *path)
 {
+	FILE *file = fopen(path, "rb");
 
+	fread(&header, sizeof(struct WAV_TYPE), 1, file);
+
+	buffer = (uint16_t*)malloc(header.overall_size);
+	fread(buffer, header.overall_size, 1, file);
+
+	fclose(file);
 }
 
 
 AudioFile::~AudioFile()
 {
+	free(buffer);
 }
