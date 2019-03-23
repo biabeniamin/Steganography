@@ -2,7 +2,7 @@
 #include "AudioFile.h"
 #include <stdio.h>
 
-AudioFile::AudioFile(char *path)
+AudioFile::AudioFile(const char *path)
 {
 	FILE *file = fopen(path, "rb");
 

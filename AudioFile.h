@@ -21,7 +21,7 @@ struct WAV_TYPE {
 class AudioFile
 {
 public:
-	AudioFile(char *path);
+	AudioFile(const char *path);
 	~AudioFile();
 
 	int GetLength();
