@@ -197,3 +197,46 @@ uchar* Embedder::ExtractData(cv::Mat input, int *length)
 	return buffer + 2;
 
 }
+
+void Embedder::EmbedDataInAudio(AudioFile *file, uchar *data2, int size, int *length)
+{
+	int addedData = 0;
+	uchar *data = (uchar*)malloc(size + 2);
+
+	memcpy(data + 2, data2, size);
+
+	//write length
+	size += 2;
+	data[0] = size >> 8;
+	data[1] = size & 0xFF;
+
+	for (int i = 0; i < file->GetLength(); i++)
+	{
+
+		uint16_t value = file->GetSample(i);
+
+		switch (addedData % 2)
+		{
+		case 0:
+			value = value & 0xF0 | (data[addedData / 2] >> 8 & 0xF);
+			break;
+		case 1:
+			value = value & 0xF0 | (data[addedData / 2] & 0xF);
+			break;
+		}
+		file->SetSample(i, value);
+
+		addedData++;
+		if (addedData >> 1 == size)
+		{
+			break;
+		}
+	}
+
+	*length = addedData >> 1;
+	if (addedData >> 1 < size)
+	{
+		printf("Could not embed in image because it is too small!");
+	}
+
+}

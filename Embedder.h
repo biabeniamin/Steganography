@@ -1,5 +1,5 @@
 #pragma once
-
+#include "AudioFile.h"
 #include <opencv2\opencv.hpp>
 
 class Embedder
@@ -20,6 +20,8 @@ public:
 
 	cv::Mat EmbedData(cv::Mat input, uchar *data, int size, int *length);
 	uchar* ExtractData(cv::Mat input, int *length);
+
+	void EmbedDataInAudio(AudioFile *file, uchar *data, int size, int *length);
 
 private:
 	uchar * buffer;
