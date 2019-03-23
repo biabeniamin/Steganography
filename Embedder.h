@@ -22,6 +22,7 @@ public:
 	uchar* ExtractData(cv::Mat input, int *length);
 
 	void EmbedDataInAudio(AudioFile *file, uchar *data, int size, int *length);
+	uchar* ExtractDataFromAudio(AudioFile *input, int *length);
 
 private:
 	uchar * buffer;

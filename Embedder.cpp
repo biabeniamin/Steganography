@@ -240,3 +240,52 @@ void Embedder::EmbedDataInAudio(AudioFile *file, uchar *data2, int size, int *le
 	}
 
 }
+
+uchar* Embedder::ExtractDataFromAudio(AudioFile *input, int *length)
+{
+	int count = 0;
+	int size = 20;
+
+	buffer = (uchar*)malloc(20);
+
+	for (int i = 0; i < input->GetLength(); i++)
+	{
+
+		uint16_t value = input->GetSample(i);
+		switch (count % 4)
+		{
+		case 0:
+			buffer[count / 2] = (value & 0xF) << 8;
+			break;
+		case 1:
+			buffer[count / 2] |= (value & 0xF);
+			break;
+		}
+
+		count++;
+
+		if (count == 2)
+		{
+			size = buffer[0] << 8 | buffer[1];
+			buffer = (uchar*)realloc(buffer, size + 50);
+		}
+
+		if (count >> 2 == size)
+		{
+			printf("done\n");
+			break;
+		}
+	}
+
+	*length = size - 2;
+
+	if (count >> 2 < size)
+	{
+		printf("Could not embed in image because it is too small!");
+		*length = 0;
+	}
+
+
+
+	return buffer + 2;
+}
