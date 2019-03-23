@@ -28,3 +28,8 @@ uint16_t AudioFile::GetSample(int location)
 {
 	return buffer[location];
 }
+
+void AudioFile::SetSample(int location, uint16_t data)
+{
+	buffer[location] = data;
+}
