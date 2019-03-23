@@ -14,8 +14,12 @@ AudioFile::AudioFile(char *path)
 	fclose(file);
 }
 
-
 AudioFile::~AudioFile()
 {
 	free(buffer);
+}
+
+int AudioFile::GetLength()
+{
+	return header.overall_size / 2;
 }

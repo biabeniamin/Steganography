@@ -23,6 +23,8 @@ class AudioFile
 public:
 	AudioFile(char *path);
 	~AudioFile();
+
+	int GetLength();
 private:
 	struct WAV_TYPE header;
 	uint16_t *buffer;
