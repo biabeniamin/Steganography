@@ -25,6 +25,7 @@ public:
 	~AudioFile();
 
 	int GetLength();
+	uint16_t GetSample(int location);
 private:
 	struct WAV_TYPE header;
 	uint16_t *buffer;

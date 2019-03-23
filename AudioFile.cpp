@@ -23,3 +23,8 @@ int AudioFile::GetLength()
 {
 	return header.overall_size / 2;
 }
+
+uint16_t AudioFile::GetSample(int location)
+{
+	return buffer[location];
+}
