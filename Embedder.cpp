@@ -218,10 +218,10 @@ void Embedder::EmbedDataInAudio(AudioFile *file, uchar *data2, int size, int *le
 		switch (addedData % 2)
 		{
 		case 0:
-			value = value & 0xF0 | (data[addedData / 2] >> 8 & 0xF);
+			value = value & 0xFFF0 | (data[addedData / 2] >> 8 & 0xF);
 			break;
 		case 1:
-			value = value & 0xF0 | (data[addedData / 2] & 0xF);
+			value = value & 0xFFF0 | (data[addedData / 2] & 0xF);
 			break;
 		}
 		file->SetSample(i, value);
@@ -252,7 +252,7 @@ uchar* Embedder::ExtractDataFromAudio(AudioFile *input, int *length)
 	{
 
 		uint16_t value = input->GetSample(i);
-		switch (count % 4)
+		switch (count % 2)
 		{
 		case 0:
 			buffer[count / 2] = (value & 0xF) << 8;
@@ -264,7 +264,7 @@ uchar* Embedder::ExtractDataFromAudio(AudioFile *input, int *length)
 
 		count++;
 
-		if (count == 2)
+		if (count == 4)
 		{
 			size = buffer[0] << 8 | buffer[1];
 			buffer = (uchar*)realloc(buffer, size + 50);
