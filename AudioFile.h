@@ -27,6 +27,8 @@ public:
 	int GetLength();
 	uint16_t GetSample(int location);
 	void SetSample(int location, uint16_t data);
+
+	void WriteToFile(const char *path);
 private:
 	struct WAV_TYPE header;
 	uint16_t *buffer;

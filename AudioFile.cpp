@@ -33,3 +33,14 @@ void AudioFile::SetSample(int location, uint16_t data)
 {
 	buffer[location] = data;
 }
+
+void AudioFile::WriteToFile(const char *path)
+{
+	FILE *file = fopen(path, "wb");
+
+	fwrite(&header, sizeof(struct WAV_TYPE), 1, file);
+
+	fwrite(buffer, header.overall_size, 1, file);
+
+	fclose(file);
+}
