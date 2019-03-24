@@ -218,7 +218,7 @@ void Embedder::EmbedDataInAudio(AudioFile *file, uchar *data2, int size, int *le
 		switch (addedData % 2)
 		{
 		case 0:
-			value = value & 0xFFF0 | (data[addedData / 2] >> 8 & 0xF);
+			value = value & 0xFFF0 | (data[addedData / 2] >> 4 & 0xF);
 			break;
 		case 1:
 			value = value & 0xFFF0 | (data[addedData / 2] & 0xF);
@@ -236,7 +236,7 @@ void Embedder::EmbedDataInAudio(AudioFile *file, uchar *data2, int size, int *le
 	*length = addedData >> 1;
 	if (addedData >> 1 < size)
 	{
-		printf("Could not embed in image because it is too small!");
+		printf("Could not embed in audio because it is too small!");
 	}
 
 }
@@ -255,7 +255,7 @@ uchar* Embedder::ExtractDataFromAudio(AudioFile *input, int *length)
 		switch (count % 2)
 		{
 		case 0:
-			buffer[count / 2] = (value & 0xF) << 8;
+			buffer[count / 2] = (value & 0xF) << 4;
 			break;
 		case 1:
 			buffer[count / 2] |= (value & 0xF);
@@ -279,9 +279,9 @@ uchar* Embedder::ExtractDataFromAudio(AudioFile *input, int *length)
 
 	*length = size - 2;
 
-	if (count >> 2 < size)
+	if (count >> 1 < size)
 	{
-		printf("Could not embed in image because it is too small!");
+		printf("Could not embed in audio because it is too small!");
 		*length = 0;
 	}
 
